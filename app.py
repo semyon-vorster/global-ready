@@ -1,6 +1,9 @@
 import streamlit as st
 from openai import OpenAI
 import os
+import sys
+
+sys.stdout.reconfigure(encoding='utf-8')
 
 # 1. Настройка внешнего вида сайта
 st.set_page_config(
