@@ -6,8 +6,9 @@ st.set_page_config(page_title="Global-Ready", layout="centered")
 st.title("🛍️ Global-Ready")
 st.write("Transform your product cards for the Chinese E-commerce Market")
 
-# Токен берется строго из настроек самого Render
-api_key = os.environ.get("GITHUB_TOKEN", "")
+# Автоматически удаляем любой скрытый мусор из токена, оставляя только буквы и цифры
+raw_token = os.environ.get("GITHUB_TOKEN", "")
+api_key = "".join(c for c in raw_token if c.isalnum() or c == "_")
 
 product_name = st.text_input("Product Name (e.g., Oversize Hoodie)")
 product_desc = st.text_area("Original Product Description (English)")
@@ -20,7 +21,7 @@ category = st.selectbox("Target Audience Category", [
 
 if st.button("Analyze & Localize"):
     if not api_key:
-        st.error("Error: GITHUB_TOKEN is missing in Render environment variables.")
+        st.error("Error: GITHUB_TOKEN is missing or empty.")
     elif not product_name or not product_desc:
         st.warning("Please fill in both the Product Name and Description.")
     else:
@@ -50,3 +51,4 @@ if st.button("Analyze & Localize"):
                 st.markdown(response.choices[0].message.content)
             except Exception as e:
                 st.error(f"An error occurred: {e}")
+                
