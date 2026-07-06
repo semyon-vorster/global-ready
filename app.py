@@ -1,18 +1,12 @@
 import streamlit as st
 from openai import OpenAI
 import os
-import sys
-
-# Настройка кодировки, чтобы Render больше никогда не выдавал ошибку ASCII
-import io
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 st.set_page_config(page_title="Global-Ready", layout="centered")
 st.title("🛍️ Global-Ready")
 st.write("Transform your product cards for the Chinese E-commerce Market")
 
-# Берем токен строго из скрытых переменных окружения Render
+# Токен берется строго из настроек самого Render
 api_key = os.environ.get("GITHUB_TOKEN", "")
 
 product_name = st.text_input("Product Name (e.g., Oversize Hoodie)")
