@@ -14,20 +14,31 @@ if 'request_count' not in st.session_state:
 st.title("🛍️ Global-Ready")
 st.write("Transform your product cards for the Chinese E-commerce Market")
 
-# --- ЛОГИКА PAYWALL ---
+# --- PAYWALL LOGIC (ENGLISH VERSION) ---
 if not st.session_state.is_pro and st.session_state.request_count >= 1:
-    st.error("🚫 Free trial limit reached!")
-    st.warning("Liked the result? To unlock unlimited access and exclusive PRO features (Slang Localization & Cultural Risk Assessment), text me on Telegram: @sh1varo . The price is just 300 rubles!")
-    
-    key_input = st.text_input("Enter your secret access key:")
-    if st.button("Activate"):
-        if key_input in VALID_KEYS:
-            st.session_state.is_pro = True
-            st.success("PRO status activated! Refreshing...")
-            st.rerun()
-        else:
-            st.error("Invalid key.")
-    st.stop() # Блокируем выполнение кода ниже
+        st.error("🚫 Free trial limit reached!")
+        
+        st.info("### 🚀 Get Unlimited PRO Access")
+        st.write("Unlock advanced cultural risk assessment and professional localization for only 300 RUB.")
+        
+        # Кнопка с английским текстом
+        st.link_button("Buy PRO Access (300 RUB)", "https://yoomoney.ru/fundraise/1ISTNB460O9.260708")
+        
+        st.divider()
+        
+        # Инструкция на английском
+        st.write("1. Complete the payment via the link above.")
+        st.write("2. Message me on Telegram @sh1varo with your payment confirmation.")
+        st.write("3. Get your instant activation key!")
+        
+        key_input = st.text_input("Enter your activation key:")
+        if st.button("Activate"):
+            if key_input == "GLOBAL_PRO_2026":
+                st.session_state.is_pro = True
+                st.success("PRO status activated! Please refresh.")
+                st.rerun()
+            else:
+                st.error("Invalid key.")
 
 # --- ОСНОВНОЙ КОД ---
 raw_token = os.environ.get("GITHUB_TOKEN", "")
