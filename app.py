@@ -3,8 +3,7 @@ from openai import OpenAI
 import os
 
 # --- КОНФИГУРАЦИЯ ---
-VALID_KEYS = ['VIP_MEMBER_777', 'LOCAL_READY_PRO', 'SUPER_SELLER']
-st.set_page_config(page_title="Global-Ready", layout="centered")
+VALID_KEYS = ['VIP_MEMBER_777', 'LOCAL_READY_PRO', 'SUPER_SELLER', 'SuperAdmin', 'Itworks', 'HOPEYOULGETTHERE', 'SAYHITOME']
 
 # Инициализация состояния сессии
 if 'is_pro' not in st.session_state:
@@ -18,7 +17,7 @@ st.write("Transform your product cards for the Chinese E-commerce Market")
 # --- ЛОГИКА PAYWALL ---
 if not st.session_state.is_pro and st.session_state.request_count >= 1:
     st.error("🚫 Free trial limit reached!")
-    st.warning("Liked the result? To unlock unlimited access and exclusive PRO features (Slang Localization & Cultural Risk Assessment), text me on Telegram: [ТВОЯ_ССЫЛКА_НА_ТГ]. The price is just 300 rubles!")
+    st.warning("Liked the result? To unlock unlimited access and exclusive PRO features (Slang Localization & Cultural Risk Assessment), text me on Telegram: @sh1varo . The price is just 300 rubles!")
     
     key_input = st.text_input("Enter your secret access key:")
     if st.button("Activate"):
@@ -82,4 +81,4 @@ if st.button("Analyze & Localize"):
                 st.markdown(response.choices[0].message.content)
             except Exception as e:
                 st.error(f"Error: {e}")
-                
+    
