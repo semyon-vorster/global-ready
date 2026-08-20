@@ -1,6 +1,6 @@
 import streamlit as st
 import os
-from google import genai
+from openai import OpenAI
 
 # --- КОНФИГУРАЦИЯ ---
 VALID_KEYS = [
@@ -51,17 +51,20 @@ if st.button("Analyze & Localize"):
     if not product_name or not product_desc:
         st.warning("Please fill in both fields.")
     else:
-        # Проверяем наличие ключа в переменных окружения Render
-        gemini_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GITHUB_TOKEN") or ""
+        # Берем ТОЛЬКО токен GitHub
+        github_token = os.environ.get("GITHUB_TOKEN") or ""
         
-        if not gemini_key:
-            st.error("Error: GEMINI_API_KEY is missing in Render Environment variables.")
+        if not github_token:
+            st.error("Error: GITHUB_TOKEN is missing in Render Environment variables.")
         else:
             st.session_state.request_count += 1
             with st.spinner("Analyzing..."):
                 try:
-                    # Официальный клиент Google GenAI
-                    client = genai.Client(api_key=gemini_key)
+                    # Эндпоинт GitHub Models
+                    client = OpenAI(
+                        base_url="https://models.github.ai/inference", 
+                        api_key=github_token
+                    )
                     
                     system_instruction = (
                         "You are an expert E-commerce Product Manager specializing in the chinese market. "
@@ -77,16 +80,15 @@ if st.button("Analyze & Localize"):
 
                     user_content = f"Product: {product_name}\nDescription: {product_desc}\nAudience: {category}"
 
-                    # Гарантированно существующая модель в Google SDK
-                    response = client.models.generate_content(
-                        model="gemini-1.5-flash",
-                        contents=f"{system_instruction}\n\n{user_content}"
+                    response = client.chat.completions.create(
+                        model="gpt-4o-mini",
+                        messages=[
+                            {"role": "system", "content": system_instruction},
+                            {"role": "user", "content": user_content}
+                        ]
                     )
 
-                    if response and response.text:
-                        st.markdown(response.text)
-                    else:
-                        st.error("Received empty response from AI model.")
+                    st.markdown(response.choices[0].message.content)
 
                 except Exception as e:
                     st.error(f"Error: {e}")
