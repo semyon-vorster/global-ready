@@ -78,7 +78,7 @@ if st.button("Analyze & Localize"):
                     user_content = f"Product: {product_name}\nDescription: {product_desc}\nAudience: {category}"
 
                     response = client.chat.completions.create(
-                        model="google/gemini=flash-1.5",
+                        model="openrouter/free",
                         messages=[
                             {"role": "system", "content": system_instruction},
                             {"role": "user", "content": user_content}
