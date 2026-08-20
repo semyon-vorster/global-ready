@@ -86,7 +86,7 @@ if st.button("Analyze & Localize"):
                 user_content = f"Product: {product_name}\nDescription: {product_desc}\nAudience: {category}"
                 
                 response = client.chat.completions.create(
-                    model="GPT-4o-mini",
+                    model="gpt-4o-mini",
                     messages=[{"role": "system", "content": system_instruction}, {"role": "user", "content": user_content}]
                 )
                 st.markdown(response.choices[0].message.content)
