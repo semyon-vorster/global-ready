@@ -68,7 +68,7 @@ if st.button("Analyze & Localize"):
         st.session_state.request_count += 1
         with st.spinner("Analyzing..."):
             try:
-                client = OpenAI(base_url="https://models.github.ai.inference", api_key=api_key)
+                client = OpenAI(base_url="https://models.github.ai/inference", api_key=api_key)
                 
                 # ... (здесь остальной код с промптом без изменений) ...
                 system_instruction = (
