@@ -8,7 +8,6 @@ VALID_KEYS = [
     'SuperAdmin', 'itworks', 'HOPEYOULGETTHERE', 'SAYHITOME'
 ]
 
-# Инициализация состояния сессии
 if 'is_pro' not in st.session_state:
     st.session_state.is_pro = False
 if 'request_count' not in st.session_state:
@@ -51,19 +50,17 @@ if st.button("Analyze & Localize"):
     if not product_name or not product_desc:
         st.warning("Please fill in both fields.")
     else:
-        # Берем ТОЛЬКО токен GitHub
-        github_token = os.environ.get("GITHUB_TOKEN") or ""
+        openrouter_key = os.environ.get("OPENROUTER_API_KEY") or ""
         
-        if not github_token:
-            st.error("Error: GITHUB_TOKEN is missing in Render Environment variables.")
+        if not openrouter_key:
+            st.error("Error: OPENROUTER_API_KEY is missing in Render Environment variables.")
         else:
             st.session_state.request_count += 1
             with st.spinner("Analyzing..."):
                 try:
-                    # Эндпоинт GitHub Models
                     client = OpenAI(
-                        base_url="https://models.github.ai/inference", 
-                        api_key=github_token
+                        base_url="https://openrouter.ai/api/v1",
+                        api_key=openrouter_key
                     )
                     
                     system_instruction = (
@@ -81,7 +78,7 @@ if st.button("Analyze & Localize"):
                     user_content = f"Product: {product_name}\nDescription: {product_desc}\nAudience: {category}"
 
                     response = client.chat.completions.create(
-                        model="gpt-4o-mini",
+                        model="meta-llama/llama-3.3-70b-instruct:free",
                         messages=[
                             {"role": "system", "content": system_instruction},
                             {"role": "user", "content": user_content}
