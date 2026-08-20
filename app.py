@@ -68,7 +68,7 @@ if st.button("Analyze & Localize"):
         st.session_state.request_count += 1
         with st.spinner("Analyzing..."):
             try:
-                client = OpenAI(base_url="https://models.inference.ai.azure.com", api_key=api_key)
+                client = OpenAI(base_url="https://models.github.ai.inference", api_key=api_key)
                 
                 # ... (здесь остальной код с промптом без изменений) ...
                 system_instruction = (
@@ -86,7 +86,7 @@ if st.button("Analyze & Localize"):
                 user_content = f"Product: {product_name}\nDescription: {product_desc}\nAudience: {category}"
                 
                 response = client.chat.completions.create(
-                    model="gpt-4o-mini",
+                    model="GPT-4o-mini",
                     messages=[{"role": "system", "content": system_instruction}, {"role": "user", "content": user_content}]
                 )
                 st.markdown(response.choices[0].message.content)
