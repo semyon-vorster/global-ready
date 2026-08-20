@@ -68,28 +68,28 @@ if st.button("Analyze & Localize"):
         st.session_state.request_count += 1
         with st.spinner("Analyzing..."):
             try:
-                client = OpenAI(base_url="https://models.github.ai/inference", api_key=api_key)
+                import urllib.request
+                import json
+
+                gemini_key = os.environ.get("GEMINI_API_KEY") or api_key
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={gemini_key}"
                 
-                # ... (здесь остальной код с промптом без изменений) ...
-                system_instruction = (
-                    "You are an expert E-commerce Product Manager specializing in the Chinese market. "
-                    "Provide your response in English, structured with Markdown headers: "
-                    "### 1. Adapted Text\n\n### 2. Marketplace Tips\n\n### 3. SEO Keywords."
+                payload = {
+                    "contents": [{
+                        "parts": [{"text": f"{system_instruction}\n\nUser Content:\n{user_content}"}]
+                    }]
+                }
+                
+                req = urllib.request.Request(
+                    url, 
+                    data=json.dumps(payload).encode('utf-8'), 
+                    headers={'Content-Type': 'application/json'}
                 )
                 
-                if st.session_state.is_pro:
-                    system_instruction += (
-                        "\n\n### 4. PRO: Chinese Slang Translation\nTranslate the product name and description into Chinese using trending slang from Taobao/Dewu.\n"
-                        "### 5. PRO: Cultural Risk Assessment\nAnalyze the text for any cultural taboos, censorship risks, or superstitions in China."
-                    )
-                
-                user_content = f"Product: {product_name}\nDescription: {product_desc}\nAudience: {category}"
-                
-                response = client.chat.completions.create(
-                    model="gpt-4o-mini",
-                    messages=[{"role": "system", "content": system_instruction}, {"role": "user", "content": user_content}]
-                )
-                st.markdown(response.choices[0].message.content)
+                with urllib.request.urlopen(req) as response:
+                    res_data = json.loads(response.read().decode('utf-8'))
+                    text_output = res_data['candidates'][0]['content']['parts'][0]['text']
+                    st.markdown(text_output)
+
             except Exception as e:
                 st.error(f"Error: {e}")
-    
