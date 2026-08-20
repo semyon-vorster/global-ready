@@ -78,7 +78,7 @@ if st.button("Analyze & Localize"):
                     user_content = f"Product: {product_name}\nDescription: {product_desc}\nAudience: {category}"
 
                     response = client.chat.completions.create(
-                        model="meta-llama/llama-3.3-70b-instruct:free",
+                        model="meta-llama/llama-3.1-8b-instruct:free",
                         messages=[
                             {"role": "system", "content": system_instruction},
                             {"role": "user", "content": user_content}
